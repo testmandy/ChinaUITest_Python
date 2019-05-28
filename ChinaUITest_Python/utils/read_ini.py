@@ -1,17 +1,18 @@
 # coding=utf-8
 import configparser
+import os
 
 
 class ReadIni:
 
-    def __init__(self):
-        self.file_path = "D:/work/PycharmProjects/AppiumPython/Android_StudyChina/elements/android/all.ini"
-        self.data = self.read_ini()
+    def __init__(self, file_path=None):
 
-        # if file_path == None:
-        #     self.file_path = "E:/PycharmProjects/AppiumPython/Android_TalkU/elements/android/all.ini"
-        # else:
-        #     self.file_path = file_path
+        if file_path == None:
+            self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/elements/android/all.ini"
+        else:
+            self.file_path = file_path
+        # self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/elements/android/all.ini"
+        self.data = self.read_ini()
 
     def read_ini(self):
         read_ini = configparser.ConfigParser()

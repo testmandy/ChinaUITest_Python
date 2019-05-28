@@ -1,9 +1,9 @@
 # coding=utf-8
 
-from Android_StudyChina.testcases.article import driver
+from ChinaUITest_Python.testcases.article import driver
 
 
-class Swipe:
+class Swipe(driver):
     # 获取屏幕的宽高
     def get_size(self):
         size = driver.get_window_size()
@@ -44,12 +44,12 @@ class Swipe:
         driver.swipe(x1, y1, x1, y)
 
     # 不同方向
-    def swipe_on(direction):
+    def swipe_on(self, direction):
         if direction == "left":
-            swipe_left()
+            self.swipe_left()
         elif direction == "right":
-            swipe_right()
+            self.swipe_right()
         elif direction == "up":
-            swipe_up()
+            self.swipe_up()
         else:
-            swipe_down()
+            self.swipe_down()

@@ -1,12 +1,22 @@
 # coding=utf-8
 
+import time
+
+from ChinaUITest_Python.utils.dos_cmd import DosCmd
+from ChinaUITest_Python.utils.port import Port
+
 import logging
 
-from Android_StudyChina.utils.dos_cmd import DosCmd
-from Android_StudyChina.utils.port import Port
+# 创建Logger
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 class Server:
+    def __init__(self):
+        self.dos = DosCmd()
+        self.port = 4723
+
     def get_devices(self):
         '''
         获取设备信息
@@ -47,10 +57,10 @@ class Server:
         print(devices_list)
         port.create_port_list(4000, [1, 2, 3])
         print(port.create_port_list(4700, ['1', '2']))
-        
+
         appium_port_list = port.create_port_list(4700, devices_list)
         print(appium_port_list)
-        
+
         bootstrap_port_list = port.create_port_list(4900, devices_list)
         print(bootstrap_port_list)
 
@@ -62,7 +72,35 @@ class Server:
         print(command_list)
         return command_list
 
+    def create_one_appium_command(self):
+        '''
+        appium -p 4723 -bp 4701 -U 159beaa8
+        :return:appium_command
+        os.system会阻塞进程，为避免不影响执行下一步，在命令前面一定要加start
+        改为用os.system("start appium -a 127.0.0.1 -p %s -U %s")
+        '''
+        time.sleep(5)
+        devices_list = self.get_devices()
+        time.sleep(5)
+        print("查询到设备：" + devices_list)
+        appium_command = "start appium -p " + str(self.port) + " -bp 4701 -U " + devices_list[0] + " --no-reset"
+        logger.info("现在启动Appium服务")
+        print("现在启动Appium服务:" + appium_command)
+        return appium_command
 
-if __name__ == '__main__':
-    server = Server()
-    server.create_appium_command()
+    def start_server(self):
+        self.start_appium = self.create_one_appium_command()
+        self.dos.excute_cmd(self.start_appium)
+
+    def kill_server(self):
+        server_list = self.dos.excute_cmd_result('tasklist | find "node.exe"')
+        if len(server_list)>0:
+            self.dos.excute_cmd('taskkill -F -PID node.exe')
+
+    def main(self):
+        self.kill_server()
+        self.start_server()
+        time.sleep(5)
+
+
+

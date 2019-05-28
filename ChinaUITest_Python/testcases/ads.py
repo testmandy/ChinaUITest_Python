@@ -2,8 +2,8 @@
 import os
 import time
 
-from Android_StudyChina.common.base_driver import BaseDriver
-from Android_StudyChina.utils.get_by_local import GetByLocal
+from ChinaUITest_Python.common.base_driver import BaseDriver
+from ChinaUITest_Python.utils.get_by_local import GetByLocal
 
 # 实例化driver
 base_driver = BaseDriver()

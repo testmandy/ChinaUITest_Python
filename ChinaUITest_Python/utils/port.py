@@ -1,7 +1,7 @@
 # coding=utf-8
 # @Time    : 2019/5/14 12:47
 # @Author  : Mandy
-from Android_StudyChina.utils.dos_cmd import DosCmd
+from ChinaUITest_Python.utils.dos_cmd import DosCmd
 
 class Port:
     def __init__(self):

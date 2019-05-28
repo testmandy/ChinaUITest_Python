@@ -1,5 +1,5 @@
 # coding=utf-8
-from Android_StudyChina.utils.read_ini import ReadIni
+from ChinaUITest_Python.utils.read_ini import ReadIni
 
 
 class GetByLocal():

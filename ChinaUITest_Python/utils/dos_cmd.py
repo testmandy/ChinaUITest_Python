@@ -12,4 +12,6 @@ class DosCmd:
             result_list.append(i.strip("\n"))
         return result_list
 
+    def excute_cmd(self, command):
+        os.system(command)
 
