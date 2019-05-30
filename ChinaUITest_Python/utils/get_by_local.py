@@ -2,7 +2,7 @@
 from ChinaUITest_Python.utils.read_ini import ReadIni
 
 
-class GetByLocal():
+class GetByLocal:
     def __init__(self, driver):
         self.driver = driver
 
@@ -20,6 +20,8 @@ class GetByLocal():
                 return self.driver.find_element_by_class_name(location)
             elif by == "classNames":
                 return self.driver.find_elements_by_class_name(location)
+            elif by == "text":
+                return self.driver.find_element_by_link_text(location)
             else:
                 return self.driver.find_element_by_xpath(location)
         else:

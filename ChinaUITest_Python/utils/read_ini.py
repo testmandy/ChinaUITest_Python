@@ -8,10 +8,9 @@ class ReadIni:
     def __init__(self, file_path=None):
 
         if file_path == None:
-            self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/elements/android/all.ini"
+            self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/config/android/elements.ini"
         else:
             self.file_path = file_path
-        # self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/elements/android/all.ini"
         self.data = self.read_ini()
 
     def read_ini(self):
@@ -21,8 +20,9 @@ class ReadIni:
 
     def get_value(self, key, section=None):
         if section == None:
-            section = 'More'
+            section = 'Axis'
         else:
             section = section
         return self.data.get(section, key)
+
 

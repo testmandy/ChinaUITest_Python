@@ -82,7 +82,7 @@ class Server:
         time.sleep(5)
         devices_list = self.get_devices()
         time.sleep(5)
-        print("查询到设备：" + devices_list)
+        print(devices_list)
         appium_command = "start appium -p " + str(self.port) + " -bp 4701 -U " + devices_list[0] + " --no-reset"
         logger.info("现在启动Appium服务")
         print("现在启动Appium服务:" + appium_command)
