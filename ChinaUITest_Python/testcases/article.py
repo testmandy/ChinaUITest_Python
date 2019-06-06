@@ -2,11 +2,12 @@
 import os
 import time
 
+from selenium.common.exceptions import *
+
 from ChinaUITest_Python.utils.get_by_local import GetByLocal
 from ChinaUITest_Python.utils.server import Server
 from ChinaUITest_Python.common.base_driver import BaseDriver
 from ChinaUITest_Python.utils.get_by_axis import GetByAxis
-
 
 
 class Article:
@@ -42,27 +43,25 @@ class Article:
         # 屏幕坐标乘以系数即为用户要点击位置的具体坐标
         self.driver.tap([(a1 * x0, b1 * y0)])
 
-
     def read(self):
         time.sleep(5)
         # 点击学习
         self.starter.get_element("study_tab", "Study").click()
         time.sleep(3)
-        # 点击第一篇文章
-        self.starter.get_element("article", "Study")[1].click()
-        # swipe.swipe_on("up")
-        time.sleep(10)
-        # 获取截屏
-        self.capture("read")
-        # 点击返回按钮
-        self.taptest("back_button")
-        time.sleep(3)
-        # 点击第2篇文章
-        self.starter.get_element("article", "Study")[2].click()
-        time.sleep(10)
-        self.capture("article")
-        # 点击返回按钮
-        self.taptest("back_button")
+        # 轮询点击每一篇文章
+        articles = self.starter.get_element("article", "Study")
+        for i in range(0, 10):
+            try:
+                articles[i].click()
+            except Exception as msg:
+                print(u"查找元素异常%s" % msg)
+            else:
+                time.sleep(15)
+                # 获取截屏
+                self.capture("read_" + str(i))
+                # 点击返回按钮
+                self.taptest("back_button")
+            continue
         time.sleep(3)
 
     def watch_video(self):
@@ -71,7 +70,12 @@ class Article:
         self.starter.get_element("video_tab", "Video").click()
         time.sleep(3)
         # 点击第三个tab联播频道
-        self.starter.get_element("lianbo", "Video").click()
+        try:
+            son_tabs = self.starter.get_element("son_tabs", "Video")
+        except InvalidSelectorException as msg:
+            print(u"查找方法无效%s" % msg)
+        else:
+            son_tabs[3].click()
         # 点击第1个视频
         self.taptest("video_one")
         # self.starter.get_element("article", "Study")[0].click()
@@ -81,13 +85,6 @@ class Article:
         # 点击返回按钮
         self.taptest("back_button")
         time.sleep(3)
-        # 点击第2个视频
-        # self.starter.get_element("article", "Study")[1].click()
-        # time.sleep(600)
-        # self.capture("watch_video2")
-        # 点击返回按钮
-        # self.taptest("back_button")
-        # time.sleep(3)
 
 
 if __name__ == '__main__':

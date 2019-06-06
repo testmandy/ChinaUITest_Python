@@ -8,6 +8,8 @@ from ChinaUITest_Python.utils.port import Port
 import logging
 
 # 创建Logger
+from ChinaUITest_Python.utils.write_userconfig import WriteUserConfig
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -15,26 +17,44 @@ logger.setLevel(logging.INFO)
 class Server:
     def __init__(self):
         self.dos = DosCmd()
-        self.port = 4723
+        global port, bp, device1
+        port = 4723
+        bp = 4700
+        device1 = self.get_devices()[0]
+        self.write_file = WriteUserConfig()
 
     def get_devices(self):
         '''
         获取设备信息
         :return:设备列表devices_list
         '''
-        dos = DosCmd()
         devices_list = []
-        result_list = dos.excute_cmd_result("adb devices")
+        # self.dos.excute_cmd_result("adb")
+        time.sleep(2)
+        try:
+            result_list = self.dos.excute_cmd_result("adb devices")
+        except Exception as msg:
+            print(u"启动adb异常%s" % msg)
+        time.sleep(2)
+        print("----------------执行adb devices的结果长度为：" + str(len(result_list)) + "----------------")
+        print(type(result_list))
+        print("执行adb devices的结果为：" + str(result_list))
         if len(result_list) >= 2:
             for i in result_list:
                 if 'List' in i:
                     continue
                 devices_info = i.split("\t")
-                if devices_info[1] == 'device':
-                    devices_list.append(devices_info[0])
+                time.sleep(2)
+                try:
+                    if devices_info[-1] == 'device':
+                        devices_list.append(devices_info[0])
+                except Exception as msg:
+                    print(u"获取device失败%s" % msg)
+                else:
+                    time.sleep(2)
             return devices_list
         else:
-            logging.info('没有连接的设备')
+            logger.info('没有连接的设备')
 
     # def create_port_list(self, start_port, devices_list):
     #     '''
@@ -53,7 +73,9 @@ class Server:
         '''
         port = Port()
         command_list = []
+        time.sleep(2)
         devices_list = self.get_devices()
+        time.sleep(2)
         print(devices_list)
         port.create_port_list(4000, [1, 2, 3])
         print(port.create_port_list(4700, ['1', '2']))
@@ -79,13 +101,14 @@ class Server:
         os.system会阻塞进程，为避免不影响执行下一步，在命令前面一定要加start
         改为用os.system("start appium -a 127.0.0.1 -p %s -U %s")
         '''
-        time.sleep(5)
-        devices_list = self.get_devices()
-        time.sleep(5)
-        print(devices_list)
-        appium_command = "start appium -p " + str(self.port) + " -bp 4701 -U " + devices_list[0] + " --no-reset"
+        time.sleep(2)
+        # devices_list = self.get_devices()
+        time.sleep(2)
+        print("启动appium前获取到设备为：" + str(device1))
+        appium_command = "start appium -p " + str(port) + " -bp " + str(bp) + " -U " + device1 + " --no-reset"
         logger.info("现在启动Appium服务")
         print("现在启动Appium服务:" + appium_command)
+        self.write_file.write_data(device1, bp, port)
         return appium_command
 
     def start_server(self):
@@ -99,8 +122,9 @@ class Server:
 
     def main(self):
         self.kill_server()
+        self.write_file.clear_data()
         self.start_server()
-        time.sleep(5)
+        time.sleep(2)
 
 
 
