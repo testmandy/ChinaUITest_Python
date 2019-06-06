@@ -1,6 +1,8 @@
 # coding=utf-8
 # @Time    : 2019/5/31 10:12
 # @Author  : Mandy
+import os
+
 import yaml
 
 
@@ -11,7 +13,11 @@ class WriteUserConfig:
         except Exception as msg:
             print(u"文件不存在%s" % msg)
         else:
-            self.file_path = './config/userconfig.yaml'
+            try:
+                self.file_path = './config/userconfig.yaml'
+            except Exception as msg:
+                print(u"文件不存在%s" % msg)
+
 
     '''
     加载yaml数据
@@ -53,9 +59,15 @@ class WriteUserConfig:
     清除yaml数据
     '''
     def clear_data(self):
-        with open(self.file_path, 'w') as fr:
-            fr.truncate()
-        fr.close()
+        try:
+            with open(self.file_path, 'w') as fr:
+                fr.truncate()
+        except Exception as msg:
+            print(u"文件不存在%s" % msg)
+            os.system("pause")
+        else:
+            fr.close()
+
 
 
 # if __name__ == '__main__':

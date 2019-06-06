@@ -1,9 +1,7 @@
 # coding=utf-8
-import sys
 import time
 import os
 from selenium.common.exceptions import *
-
 from common.base_driver import BaseDriver
 from utils.get_by_local import GetByLocal
 from utils.server import Server
@@ -84,6 +82,21 @@ class Article:
         self.capture("watch_video")
         # 点击返回按钮
         self.taptest("back_button")
+        time.sleep(3)
+        # 轮询点击每一个视频
+        articles = self.starter.get_element("article", "Study")
+        for i in range(0, 10):
+            try:
+                articles[i].click()
+            except Exception as msg:
+                print(u"查找元素异常%s" % msg)
+            else:
+                time.sleep(60)
+                # 获取截屏
+                self.capture("watch_video_" + str(i))
+                # 点击返回按钮
+                self.taptest("back_button")
+            continue
         time.sleep(3)
 
 
