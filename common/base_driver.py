@@ -2,12 +2,10 @@
 import time
 import sys
 import os
+from appium import webdriver
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
-from appium import webdriver
-
-
 
 # '''
 # 为了使类只能出现一个实例，我们可以使用 __new__ 来控制实例的创建过程
