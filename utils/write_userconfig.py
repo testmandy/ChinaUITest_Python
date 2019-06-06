@@ -5,11 +5,19 @@ import yaml
 
 
 class WriteUserConfig:
+    def __init__(self):
+        try:
+            self.file_path = '../config/userconfig.yaml'
+        except Exception as msg:
+            print(u"文件不存在%s" % msg)
+        else:
+            self.file_path = './config/userconfig.yaml'
+
     '''
     加载yaml数据
     '''
     def read_data(self):
-        with open('../config/userconfig.yaml', 'r') as fr:
+        with open(self.file_path, 'r') as fr:
             data = yaml.load(fr, Loader=yaml.Loader)
         return data
 
@@ -26,7 +34,7 @@ class WriteUserConfig:
     '''
     def write_data(self, device, bp, port):
         data = self.join_data(device, bp, port)
-        with open('../config/userconfig.yaml', 'a') as fr:
+        with open(self.file_path, 'a') as fr:
             yaml.dump(data, fr)
 
     '''
@@ -45,7 +53,7 @@ class WriteUserConfig:
     清除yaml数据
     '''
     def clear_data(self):
-        with open('../config/userconfig.yaml', 'w') as fr:
+        with open(self.file_path, 'w') as fr:
             fr.truncate()
         fr.close()
 

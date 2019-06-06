@@ -43,10 +43,10 @@ class Article:
         self.driver.tap([(a1 * x0, b1 * y0)])
 
     def read(self):
-        time.sleep(5)
+        time.sleep(3)
         # 点击学习
         self.starter.get_element("study_tab", "Study").click()
-        time.sleep(3)
+        time.sleep(2)
         # 轮询点击每一篇文章
         articles = self.starter.get_element("article", "Study")
         for i in range(0, 10):
@@ -64,7 +64,7 @@ class Article:
         time.sleep(3)
 
     def watch_video(self):
-        time.sleep(5)
+        time.sleep(3)
         # 点击视听学习
         self.starter.get_element("video_tab", "Video").click()
         time.sleep(3)

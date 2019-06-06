@@ -3,5 +3,5 @@
 # @Author  : Mandy
 
 import os
-# os.system("Python ./testcases/login.py")
 os.system("Python ./testcases/article.py")
+

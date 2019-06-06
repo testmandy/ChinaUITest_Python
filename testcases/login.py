@@ -2,8 +2,9 @@
 import os
 import time
 
+from common.base_driver import BaseDriver
 from utils.get_by_local import GetByLocal
-from ChinaUITest_Python.common.base_driver import BaseDriver
+
 
 # 实例化driver
 base_driver = BaseDriver()
