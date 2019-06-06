@@ -3,11 +3,10 @@ import os
 import time
 
 from selenium.common.exceptions import *
-
-from ChinaUITest_Python.utils.get_by_local import GetByLocal
-from ChinaUITest_Python.utils.server import Server
-from ChinaUITest_Python.common.base_driver import BaseDriver
-from ChinaUITest_Python.utils.get_by_axis import GetByAxis
+from common.base_driver import BaseDriver
+from utils.get_by_local import GetByLocal
+from utils.server import Server
+from utils.get_by_axis import GetByAxis
 
 
 class Article:

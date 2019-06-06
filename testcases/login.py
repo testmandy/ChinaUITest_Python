@@ -2,7 +2,7 @@
 import os
 import time
 
-from ChinaUITest_Python.utils.get_by_local import GetByLocal
+from utils.get_by_local import GetByLocal
 from ChinaUITest_Python.common.base_driver import BaseDriver
 
 # 实例化driver
