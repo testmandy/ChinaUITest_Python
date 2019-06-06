@@ -21,7 +21,10 @@ class Server:
         global port, bp, device1
         port = 4723
         bp = 4700
-        device1 = self.get_devices()[0]
+        try:
+            device1 = self.get_devices()[0]
+        except Exception as msg:
+            print(u"ADB server ERROR：%s" % msg)
         self.write_file = WriteUserConfig()
 
     def get_devices(self):

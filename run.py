@@ -4,7 +4,11 @@
 
 import os
 import sys
-sys.path.append('E:\\PycharmProjects\\ChinaUITest_Python')
-print(sys.path)
-os.system("Python ./testcases/article.py")
+if __name__ == '__main__':
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+    sys.path.append(file_path)
+    print(file_path)
+    print(sys.path)
+    os.system("Python ./testcases/article.py")
+
 
