@@ -1,11 +1,16 @@
 # coding=utf-8
 import time
-import os
 from selenium.common.exceptions import *
 from common.base_driver import BaseDriver
 from utils.get_by_local import GetByLocal
 from utils.server import Server
 from utils.get_by_axis import GetByAxis
+
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
 
 
 class Article:

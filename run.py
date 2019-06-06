@@ -8,4 +8,3 @@ rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 
 os.system("Python ./testcases/article.py")
-
