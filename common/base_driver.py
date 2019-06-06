@@ -36,9 +36,16 @@ class BaseDriver(SuperDriver):
             "appPackage": "cn.xuexi.android",
             "noReset": "true"
         }
-        driver = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
-        time.sleep(3)
-        return driver
+        try:
+            driver = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
+        except Exception as msg:
+            print(u"connection error：%s" % msg)
+        else:
+            time.sleep(3)
+            return driver
+
+
+
 
 
 
