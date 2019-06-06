@@ -68,12 +68,12 @@ class Article:
         self.starter.get_element("video_tab", "Video").click()
         time.sleep(3)
         # 点击第三个tab联播频道
-        try:
-            son_tabs = self.starter.get_element("son_tabs", "Video")
-        except InvalidSelectorException as msg:
-            print(u"查找方法无效%s" % msg)
-        else:
-            son_tabs[3].click()
+        # try:
+        #     son_tabs = self.starter.get_element("son_tabs", "Video")
+        # except InvalidSelectorException as msg:
+        #     print(u"查找方法无效%s" % msg)
+        # else:
+        #     son_tabs[3].click()
         # 点击第1个视频
         self.taptest("video_one")
         # self.starter.get_element("article", "Study")[0].click()
@@ -84,10 +84,10 @@ class Article:
         self.taptest("back_button")
         time.sleep(3)
         # 轮询点击每一个视频
-        articles = self.starter.get_element("article", "Study")
+        videos = self.starter.get_element("videos", "Video")
         for i in range(0, 10):
             try:
-                articles[i].click()
+                videos[i].click()
             except Exception as msg:
                 print(u"查找元素异常%s" % msg)
             else:
