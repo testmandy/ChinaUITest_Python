@@ -47,7 +47,7 @@ class Article:
         time.sleep(2)
         # 轮询点击每一篇文章
         articles = self.starter.get_element("article", "Study")
-        for i in range(0, 3):
+        for i in range(0, 4):
             try:
                 articles[i].click()
             except Exception as msg:
@@ -59,7 +59,7 @@ class Article:
                 time.sleep(3)
                 # 点击添加评论
                 self.taptest("add_views")
-                self.starter.get_element("add_comment", "Study").send_keys(u"坚持走中国特色社会主义道路")
+                self.starter.get_element("add_comment", "Study").send_keys("坚持走中国特色社会主义道路")
                 # 点击发布评论
                 self.starter.get_element("add_comment_button", "Study")[1].click()
                 time.sleep(5)

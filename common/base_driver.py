@@ -34,7 +34,9 @@ class BaseDriver(SuperDriver):
             "app": "E:\\360Downloads\\cn.xuexi.android_508.apk",
             "appWaitActivity": "com.alibaba.android.rimet.biz.SplashActivity",
             "appPackage": "cn.xuexi.android",
-            "noReset": "true"
+            "noReset": "true",
+            "unicodeKeyboard": "true",  # 使用Unicode编码方式发送字符串
+            "resetKeyboard": "true"   # 隐藏键盘
         }
         try:
             driver = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
