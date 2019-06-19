@@ -1,7 +1,6 @@
 # coding=utf-8
 import time
 import os
-from selenium.common.exceptions import *
 from common.base_driver import BaseDriver
 from utils.get_by_local import GetByLocal
 from utils.server import Server
@@ -10,7 +9,7 @@ from utils.get_by_axis import GetByAxis
 
 class Article:
     def __init__(self):
-        # 实例化se
+        # 实例化server
         self.server = Server()
         self.server.main()
         # 调用get_driver
@@ -48,19 +47,28 @@ class Article:
         time.sleep(2)
         # 轮询点击每一篇文章
         articles = self.starter.get_element("article", "Study")
-        for i in range(0, 10):
+        for i in range(0, 3):
             try:
                 articles[i].click()
             except Exception as msg:
                 print(u"查找元素异常%s" % msg)
             else:
-                time.sleep(15)
+                time.sleep(5)
+                # 添加收藏
+                self.taptest("add_favorite")
+                time.sleep(3)
+                # 点击添加评论
+                self.taptest("add_views")
+                self.starter.get_element("add_comment", "Study").send_keys(u"坚持走中国特色社会主义道路")
+                # 点击发布评论
+                self.starter.get_element("add_comment_button", "Study")[1].click()
+                time.sleep(5)
                 # 获取截屏
                 self.capture("read_" + str(i))
                 # 点击返回按钮
                 self.taptest("back_button")
             continue
-        time.sleep(3)
+        time.sleep(2)
 
     def watch_video(self):
         time.sleep(3)
@@ -75,23 +83,23 @@ class Article:
         # else:
         #     son_tabs[3].click()
         # 点击第1个视频
-        self.taptest("video_one")
-        # self.starter.get_element("article", "Study")[0].click()
-        time.sleep(60)
-        # 获取截屏
-        self.capture("watch_video")
-        # 点击返回按钮
-        self.taptest("back_button")
-        time.sleep(3)
+        # self.taptest("video_one")
+        # # self.starter.get_element("article", "Study")[0].click()
+        # time.sleep(60)
+        # # 获取截屏
+        # self.capture("watch_video")
+        # # 点击返回按钮
+        # self.taptest("back_button")
+        # time.sleep(3)
         # 轮询点击每一个视频
         videos = self.starter.get_element("videos", "Video")
-        for i in range(0, 10):
+        for i in range(6, 9):
             try:
                 videos[i].click()
             except Exception as msg:
                 print(u"查找元素异常%s" % msg)
             else:
-                time.sleep(60)
+                time.sleep(10)
                 # 获取截屏
                 self.capture("watch_video_" + str(i))
                 # 点击返回按钮

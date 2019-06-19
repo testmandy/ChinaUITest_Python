@@ -109,7 +109,7 @@ class Server:
         # devices_list = self.get_devices()
         time.sleep(2)
         print("启动appium前获取到设备为：" + str(device1))
-        appium_command = "start appium -p " + str(port) + " -bp " + str(bp) + " -U " + device1 + " --no-reset"
+        appium_command = "start appium -p " + str(port) + " -bp " + str(bp) + " -U " + device1 + " --session-override --no-reset"
         logger.info("现在启动Appium服务")
         print("现在启动Appium服务:" + appium_command)
         self.write_file.write_data(device1, bp, port)
@@ -118,17 +118,24 @@ class Server:
     def start_server(self):
         self.start_appium = self.create_one_appium_command()
         self.dos.excute_cmd(self.start_appium)
+        print("appium启动成功")
 
     def kill_server(self):
-        server_list = self.dos.excute_cmd_result('tasklist | find "node.exe"')
-        if len(server_list)>0:
-            self.dos.excute_cmd('taskkill -F -PID node.exe')
+        try:
+            server_list = self.dos.excute_cmd_result('tasklist | find "node.exe"')
+            if len(server_list) > 0:
+                self.dos.excute_cmd('taskkill -F -PID node.exe')
+        except Exception as msg:
+            print(u"kill task error：%s" % msg)
+        else:
+            print("Kill node.exe SUCCESS")
+
 
     def main(self):
         self.kill_server()
         self.write_file.clear_data()
         self.start_server()
-        time.sleep(2)
+        time.sleep(1)
 
 
 

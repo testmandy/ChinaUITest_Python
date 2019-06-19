@@ -40,8 +40,11 @@ class BaseDriver(SuperDriver):
             driver = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
         except Exception as msg:
             print(u"connection error：%s" % msg)
+            time.sleep(1)
+            driver2 = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
+            return driver2
         else:
-            time.sleep(3)
+            time.sleep(1)
             return driver
 
 
