@@ -69,7 +69,7 @@ class Article:
         self.starter.get_elements_element(page, "videos", "Video")[4].click()
         # 点击第一个【新闻联播】
         self.starter.get_elements_element(page, "videos", "Video")[9].click()
-        time.sleep(10)
+        time.sleep(1800)
         # 点击返回按钮
         self.swipe.tap_test("back_button")
         # 轮询点击每一个视频
