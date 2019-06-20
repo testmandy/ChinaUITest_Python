@@ -40,9 +40,9 @@ class Server:
         except Exception as msg:
             print(u"启动adb异常%s" % msg)
         time.sleep(2)
-        print("----------------执行adb devices的结果长度为：" + str(len(result_list)) + "----------------")
-        print(type(result_list))
-        print("执行adb devices的结果为：" + str(result_list))
+        # print("----------------执行adb devices的结果长度为：" + str(len(result_list)) + "----------------")
+        # print(type(result_list))
+        print("----------------执行adb devices的结果为：" + str(result_list))
         if len(result_list) >= 2:
             for i in result_list:
                 if 'List' in i:

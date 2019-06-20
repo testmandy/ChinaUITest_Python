@@ -1,10 +1,9 @@
 # coding=utf-8
 import time
-import os
 from common.base_driver import BaseDriver
 from utils.get_by_local import GetByLocal
 from utils.server import Server
-from utils.get_by_axis import GetByAxis
+from utils.swipe import Swipe
 
 
 class Article:
@@ -18,55 +17,45 @@ class Article:
         print("开始运行APP")
         # 实例化GetByLocal
         self.starter = GetByLocal(self.driver)
-        self.getbyaxis = GetByAxis()
-
-
-    def capture(self, name):
-        # 截图
-        img_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + '//screenshots//'
-        time2 = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-        screen_save_path = img_folder + time2 + '_' + name + '.png'
-        self.driver.get_screenshot_as_file(screen_save_path)
-
-    def taptest(self, key):
-        # 设定系数,控件在当前手机的坐标位置除以当前手机的最大坐标就是相对的系数了
-        x = int(self.getbyaxis.get_axis(key)[0])
-        y = int(self.getbyaxis.get_axis(key)[1])
-        a1 = x / 720
-        b1 = y / 1280
-        # 获取当前手机屏幕大小X,Y
-        x0 = self.driver.get_window_size()['width']
-        y0 = self.driver.get_window_size()['height']
-        # 屏幕坐标乘以系数即为用户要点击位置的具体坐标
-        self.driver.tap([(a1 * x0, b1 * y0)])
+        self.swipe = Swipe(self.driver)
 
     def read(self):
-        time.sleep(3)
+        time.sleep(2)
         # 点击学习
         self.starter.get_element("study_tab", "Study").click()
-        time.sleep(2)
+        time.sleep(1)
+        # 点击【要闻】
+        page = self.starter.get_element("page", "Study")
+        self.starter.get_elements_element(page, "articles", "Study")[3].click()
         # 轮询点击每一篇文章
-        articles = self.starter.get_element("article", "Study")
+        articles = self.starter.get_element("articles", "Study")
         for i in range(0, 4):
             try:
                 articles[i].click()
             except Exception as msg:
                 print(u"查找元素异常%s" % msg)
             else:
+                time.sleep(1)
+                # 向上滑动
+                self.swipe.swipe_on("up")
+                time.sleep(5)
+                self.swipe.swipe_on("down")
                 time.sleep(5)
                 # 添加收藏
-                self.taptest("add_favorite")
-                time.sleep(3)
+                self.swipe.tap_test("add_favorite")
+                time.sleep(1)
+                '''
                 # 点击添加评论
-                self.taptest("add_views")
+                self.swipe.tap_test("add_views")
                 self.starter.get_element("add_comment", "Study").send_keys("坚持走中国特色社会主义道路")
                 # 点击发布评论
                 self.starter.get_element("add_comment_button", "Study")[1].click()
                 time.sleep(5)
+                '''
                 # 获取截屏
-                self.capture("read_" + str(i))
+                self.swipe.capture("read_" + str(i))
                 # 点击返回按钮
-                self.taptest("back_button")
+                self.swipe.tap_test("back_button")
             continue
         time.sleep(2)
 
@@ -75,35 +64,27 @@ class Article:
         # 点击视听学习
         self.starter.get_element("video_tab", "Video").click()
         time.sleep(3)
-        # 点击第三个tab联播频道
-        # try:
-        #     son_tabs = self.starter.get_element("son_tabs", "Video")
-        # except InvalidSelectorException as msg:
-        #     print(u"查找方法无效%s" % msg)
-        # else:
-        #     son_tabs[3].click()
-        # 点击第1个视频
-        # self.taptest("video_one")
-        # # self.starter.get_element("article", "Study")[0].click()
-        # time.sleep(60)
-        # # 获取截屏
-        # self.capture("watch_video")
-        # # 点击返回按钮
-        # self.taptest("back_button")
-        # time.sleep(3)
+        # 点击【联播视频】
+        page = self.starter.get_element("page", "Video")
+        self.starter.get_elements_element(page, "videos", "Video")[4].click()
+        # 点击第一个【新闻联播】
+        self.starter.get_elements_element(page, "videos", "Video")[9].click()
+        time.sleep(10)
+        # 点击返回按钮
+        self.swipe.tap_test("back_button")
         # 轮询点击每一个视频
         videos = self.starter.get_element("videos", "Video")
-        for i in range(6, 9):
+        for i in range(0, 5):
             try:
                 videos[i].click()
             except Exception as msg:
                 print(u"查找元素异常%s" % msg)
             else:
-                time.sleep(10)
+                time.sleep(15)
                 # 获取截屏
-                self.capture("watch_video_" + str(i))
+                self.swipe.capture("watch_video_" + str(i))
                 # 点击返回按钮
-                self.taptest("back_button")
+                self.swipe.tap_test("back_button")
             continue
         time.sleep(3)
 
