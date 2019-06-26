@@ -25,6 +25,7 @@ class Server:
             device1 = self.get_devices()[0]
         except Exception as msg:
             print(u"ADB server ERROR：%s" % msg)
+            quit()
         self.write_file = WriteUserConfig()
 
     def get_devices(self):
@@ -37,8 +38,10 @@ class Server:
         time.sleep(2)
         try:
             result_list = self.dos.excute_cmd_result("adb devices")
+            # raise TypeError
         except Exception as msg:
             print(u"启动adb异常%s" % msg)
+            quit()
         time.sleep(2)
         # print("----------------执行adb devices的结果长度为：" + str(len(result_list)) + "----------------")
         # print(type(result_list))
@@ -126,7 +129,7 @@ class Server:
             if len(server_list) > 0:
                 self.dos.excute_cmd('taskkill -F -PID node.exe')
         except Exception as msg:
-            print(u"kill task error：%s" % msg)
+            print(u"没有已启动的node：%s" % msg)
         else:
             print("Kill node.exe SUCCESS")
 
