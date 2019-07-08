@@ -9,26 +9,24 @@ from appium import webdriver
 from utils.write_userconfig import WriteUserConfig
 
 
-class SuperDriver(object):
-    _instance = None
+# class SuperDriver(object):
+#     _instance = None
+#
+#     def __new__(cls, *args, **kwargs):
+#         if not cls._instance:
+#             cls._instance = super(SuperDriver, cls).__new__(cls, *args, **kwargs)
+#         return cls._instance
 
-    def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super(SuperDriver, cls).__new__(cls, *args, **kwargs)
-        return cls._instance
-
-
-class BaseDriver(SuperDriver):
-    def __init__(self):
+class BaseDriver:
+    def __init__(self, i):
         write_file = WriteUserConfig()
-        self.device1 = write_file.get_value('deviceName')
-        self.port = write_file.get_value('port')
+        self.device = write_file.get_value('device' + str(i), 'deviceName')
+        self.port = write_file.get_value('device' + str(i), 'port')
 
     def android_driver(self):
-        print("Android driver已连接的第一个设备：" + self.device1)
         capabilities = {
             "platformName": "Android",
-            "deviceName": self.device1,
+            "deviceName": self.device,
             # 可以通过newcommandtimeout将超时时间改长，超时时间可按照实际情况自定义
             "newCommandTimeout": "2000",
             "app": "E:\\360Downloads\\cn.xuexi.android_508.apk",
@@ -36,7 +34,7 @@ class BaseDriver(SuperDriver):
             "appPackage": "cn.xuexi.android",
             "noReset": "true",
             "unicodeKeyboard": "true",  # 使用Unicode编码方式发送字符串
-            "resetKeyboard": "true"   # 隐藏键盘
+            "resetKeyboard": "true"  # 隐藏键盘
         }
         try:
             driver = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
@@ -48,6 +46,26 @@ class BaseDriver(SuperDriver):
         else:
             time.sleep(1)
             return driver
+
+    def iOS_driver(self):
+        # 配置信息
+        print("iOS driver已连接的第一个设备：" + self.device)
+        capabilities = {
+            "platformName": "iOS",
+            "deviceName": "iPhone 6s",
+            # 可以通过newcommandtimeout将超时时间改长，超时时间可按照实际情况自定义
+            "newCommandTimeout": "2000",
+            "udid": "601861ce25a7dae4dc3d12e6f43cd42936XXXXXX",
+            "automationName": "XCUITest",
+            "xcodeOrgId": "7GTPKLXXXX",
+            "xcodeSigningId": "iPhone Developer",
+            "no-reset": "true",
+            "startIWDP": "true",
+            "bundleId": "com.XXXXXX"
+        }
+        driver = webdriver.Remote("http://127.0.0.1:" + str(self.port) + "/wd/hub", capabilities)
+        time.sleep(5)
+        return driver
 
 
 

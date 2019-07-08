@@ -9,16 +9,15 @@ import yaml
 class WriteUserConfig:
     def __init__(self):
         try:
-            self.file_path = '../config/userconfig.yaml'
+            # self.file_path = '../config/userconfig.yaml'
+            self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + '/config/userconfig.yaml'
         except Exception as msg:
             print(u"文件不存在%s" % msg)
-        else:
-            try:
-                self.file_path = './config/userconfig.yaml'
-            except Exception as msg:
-                print(u"文件不存在%s" % msg)
-
-
+        # else:
+        #     try:
+        #         self.file_path = './config/userconfig.yaml'
+        #     except Exception as msg:
+        #         print(u"文件不存在%s" % msg)
     '''
     加载yaml数据
     '''
@@ -30,28 +29,29 @@ class WriteUserConfig:
     '''
     获取value值
     '''
-    def get_value(self, key):
+    def get_value(self, section, key):
         data = self.read_data()
-        value = data['device1'][key]
+        value = data[section][key]
         return value
 
     '''
     写入yaml数据
     '''
-    def write_data(self, device, bp, port):
-        data = self.join_data(device, bp, port)
+    def write_data(self, i, device, bp, port):
+        data = self.join_data(i, device, bp, port)
         with open(self.file_path, 'a') as fr:
             yaml.dump(data, fr)
 
     '''
     拼接数据
     '''
-    def join_data(self, device, bp, port):
+    def join_data(self, i, device, bp, port):
         data = {
-            "device1":
+            "device"+str(i):
                 {"deviceName": device,
-                 "bp": bp,
-                 "port": port}
+                 "port": port,
+                 "bp": bp
+                 }
         }
         return data
 
@@ -59,15 +59,9 @@ class WriteUserConfig:
     清除yaml数据
     '''
     def clear_data(self):
-        try:
-            with open(self.file_path, 'w') as fr:
-                fr.truncate()
-        except Exception as msg:
-            print(u"文件不存在%s" % msg)
-            os.system("pause")
-        else:
-            fr.close()
-
+        with open(self.file_path, 'w') as fr:
+            fr.truncate()
+        fr.close()
 
 
 # if __name__ == '__main__':

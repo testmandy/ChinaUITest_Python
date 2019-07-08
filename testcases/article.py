@@ -1,85 +1,99 @@
 # coding=utf-8
 import time
+import unittest
 from common.base_driver import BaseDriver
-from utils.get_by_local import GetByLocal
 from utils.server import Server
-from utils.swipe import Swipe
+from utils.operation import Operation
 
 
-class Article:
-    def __init__(self):
-        # 实例化server
-        self.server = Server()
-        self.server.main()
+class Article(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # 必须使用@classmethod 装饰器,所有test运行前运行一次
+        global operation, driver
         # 调用get_driver
-        self.base_driver = BaseDriver()
-        self.driver = self.base_driver.android_driver()
-        print("开始运行APP")
-        # 实例化GetByLocal
-        self.starter = GetByLocal(self.driver)
-        self.swipe = Swipe(self.driver)
+        server = Server()
+        server.main()
+        base_driver = BaseDriver(0)
+        driver = base_driver.android_driver()
+        # 实例化Operation
+        operation = Operation(driver)
 
-    def read(self):
+    @classmethod
+    def tearDownClass(cls):
+        # 必须使用 @ classmethod装饰器, 所有test运行完后运行一次
+        print(u'关闭driver')
+        driver.quit()
+
+    def tearDown(self):
+        # 每个测试用例执行之后做操作
+        print(u'用例执行后')
+        flag = operation.find_element("study_tab", "Study")
+        print(flag)
+        while flag is False:
+            operation.tap_test("back_button")
+            flag = operation.find_element("study_tab", "Study")
+        print(u'用例执行完成，开始执行下一个')
+
+    def setUp(self):
+        # 每个测试用例执行之前做操作
+        print(u'用例执行前')
+
+    def test_read(self):
+        """
+        测试用例：阅读文章
+        """
         time.sleep(5)
         # 点击学习
-        self.starter.get_element("study_tab", "Study").click()
-        time.sleep(1)
+        operation.waiting_click(2, "study_tab", "Study")
         # 点击【要闻】
-        page = self.starter.get_element("page", "Study")
-        tabs = self.starter.get_elements_element(page, "articles", "Study")
+        page = operation.get_element("page", "Study")
+        tabs = operation.get_son_element(page, "articles", "Study")
         # tabs[3].click()
         # 轮询点击【tab】
-        for j in range(3, 10):
+        for j in range(2, 10):
             try:
                 tabs[j].click()
                 # 向上滑动
-                self.swipe.swipe_on("up")
+                operation.swipe_on("up")
                 time.sleep(2)
                 # 轮询点击每一篇文章
-                articles = self.starter.get_element("articles", "Study")
+                articles = operation.get_element("articles", "Study")
                 for i in range(0, 3):
                     try:
                         articles[i].click()
                     except Exception as msg:
                         print(u"查找元素异常%s" % msg)
                     else:
-                        time.sleep(1)
-                        # 向上滑动
-                        self.swipe.swipe_on("up")
-                        time.sleep(1)
-                        self.swipe.swipe_on("down")
-                        time.sleep(1)
+                        # 上下滑动
+                        operation.swipe_on("up")
+                        operation.swipe_on("down")
                         # 添加收藏
-                        self.swipe.tap_test("add_favorite")
-                        time.sleep(1)
+                        operation.tap_test("add_favorite")
                         # 点击分享
-                        self.swipe.tap_test("share")
-                        time.sleep(2)
-                        self.starter.get_element("share_methods", "Contacts")[0].click()
-                        time.sleep(2)
+                        operation.tap_test("share")
+                        operation.waiting_click(1, "share_methods", "Contacts", 0)
                         # 点击第一个最近联系人
-                        self.starter.get_element("friends", "Contacts")[0].click()
-                        time.sleep(1)
+                        operation.waiting_click(2, "friends", "Contacts", 0)
                         # 点击确认发送按钮
-                        self.starter.get_element("confirm", "Common").click()
-                        time.sleep(10)
+                        operation.waiting_click(1, "confirm", "Common")
+                        # '''
                         # 点击添加评论
-                        self.swipe.tap_test("add_views")
-                        self.starter.get_element("add_comment", "Study").send_keys("坚持走中国特色社会主义道路")
+                        operation.tap_test("add_views")
+                        operation.waiting_send_keys(1, "add_comment", "Study", "坚持走中国特色社会主义道路")
                         # 点击发布评论
-                        self.starter.get_element("add_comment_button", "Study")[1].click()
-                        time.sleep(2)
+                        operation.waiting_click(2, "add_comment_button", "Study", 1)
                         # 删除评论
-                        views_frame = self.starter.get_element("views_frame", "Study")
-                        text = self.starter.get_elements_element(views_frame, "text", "Study")
+                        views_frame = operation.get_element("views_frame", "Study")
+                        text = operation.get_son_element(views_frame, "text", "Study")
                         text[7].click()
                         # 点击确认删除按钮
-                        self.starter.get_element("confirm", "Common").click()
-                        time.sleep(2)
+                        operation.waiting_click(2, "confirm", "Common")
+                        time.sleep(10)
                         # 获取截屏
-                        self.swipe.capture("read_" + str(i))
+                        operation.capture("read_" + str(i))
                         # 点击返回按钮
-                        self.swipe.tap_test("back_button")
+                        operation.tap_test("back_button")
                     continue
                 time.sleep(2)
             except Exception as msg:
@@ -87,27 +101,28 @@ class Article:
             else:
                 time.sleep(1)
 
-    def watch_video(self):
-        time.sleep(3)
+    def test_watch_video(self):
+        """
+        测试用例：视听学习
+        """
         # 点击视听学习
-        self.starter.get_element("video_tab", "Video").click()
-        time.sleep(3)
+        operation.waiting_click(2, "video_tab", "Video")
         # 点击【联播视频】
-        page = self.starter.get_element("page", "Video")
-        videos = self.starter.get_elements_element(page, "videos", "Video")
+        page = operation.get_element("page", "Video")
+        videos = operation.get_son_element(page, "videos", "Video")
         videos[4].click()
         # 点击第一个【新闻联播】
         videos[9].click()
-        time.sleep(1080)
+        time.sleep(1000)
         # 点击返回按钮
-        self.swipe.tap_test("back_button")
+        operation.tap_test("back_button")
 
         # 轮询点击【tab】
         for j in range(2, 9):
             try:
                 videos[j].click()
                 # # 向上滑动
-                # self.swipe.swipe_on("up")
+                # operation.swipe_on("up")
                 time.sleep(2)
                 # 轮询点击每一个视频
                 for i in range(10, 17, 2):
@@ -118,21 +133,13 @@ class Article:
                     else:
                         time.sleep(15)
                         # 获取截屏
-                        self.swipe.capture("watch_video_" + str(i))
+                        operation.capture("watch_video_" + str(i))
                         # 点击返回按钮
-                        self.swipe.tap_test("back_button")
+                        operation.tap_test("back_button")
                     continue
                 time.sleep(3)
-
             except Exception as msg:
                 print(u"查找元素异常%s" % msg)
             else:
                 time.sleep(1)
-
-
-if __name__ == '__main__':
-    article = Article()
-    article.read()
-    article.watch_video()
-
 

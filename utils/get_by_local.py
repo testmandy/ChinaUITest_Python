@@ -3,46 +3,50 @@ from utils.read_ini import ReadIni
 
 
 class GetByLocal:
-    def __init__(self, driver):
-        self.driver = driver
+    def __init__(self):
         self.readIni = ReadIni()
 
-    def get_element(self, key, section):
-        local = self.readIni.get_value(key, section)
+    def get_element(self, driver, key, section):
+        """
+        查找页面元素
+        :return:查找结果element
+        """
+        read_ini = self.readIni
+        local = read_ini.get_value(key, section)
         if local is not None:
             by = local.split(">")[0]
             location = local.split(">")[1]
             if by == "id":
-                return self.driver.find_element_by_id(location)
+                try:
+                    return driver.find_element_by_id(location)
+                except Exception as msg:
+                    print(u"查找元素异常%s" % msg)
+                    return None
             elif by == "ids":
-                return self.driver.find_elements_by_id(location)
+                try:
+                    return driver.find_elements_by_id(location)
+                except Exception as msg:
+                    print(u"查找元素异常%s" % msg)
             elif by == "className":
-                return self.driver.find_element_by_class_name(location)
+                try:
+                    return driver.find_element_by_class_name(location)
+                except Exception as msg:
+                    print(u"查找元素异常%s" % msg)
             elif by == "classNames":
-                return self.driver.find_elements_by_class_name(location)
+                try:
+                    return driver.find_elements_by_class_name(location)
+                except Exception as msg:
+                    print(u"查找元素异常%s" % msg)
             elif by == "text":
-                return self.driver.find_element_by_link_text(location)
+                try:
+                    return driver.find_element_by_link_text(location)
+                except Exception as msg:
+                    print(u"查找元素异常%s" % msg)
             else:
-                return self.driver.find_element_by_xpath(location)
+                try:
+                    return driver.find_element_by_xpath(location)
+                except Exception as msg:
+                    print(u"查找元素异常%s" % msg)
         else:
             return None
 
-    def get_elements_element(self, elements, key, section):
-        local = self.readIni.get_value(key, section)
-        if local is not None:
-            by = local.split(">")[0]
-            location = local.split(">")[1]
-            if by == "id":
-                return elements.find_element_by_id(location)
-            elif by == "ids":
-                return elements.find_elements_by_id(location)
-            elif by == "className":
-                return elements.find_element_by_class_name(location)
-            elif by == "classNames":
-                return elements.find_elements_by_class_name(location)
-            elif by == "text":
-                return elements.find_element_by_link_text(location)
-            else:
-                return elements.find_element_by_xpath(location)
-        else:
-            return None
