@@ -19,11 +19,18 @@ from utils.write_userconfig import WriteUserConfig
 
 class BaseDriver:
     def __init__(self, i):
+        """
+        appium 命令生成设备信息后，从userconfig.ini文件中读取device、port
+        """
         write_file = WriteUserConfig()
         self.device = write_file.get_value('device' + str(i), 'deviceName')
         self.port = write_file.get_value('device' + str(i), 'port')
 
     def android_driver(self):
+        """
+        Android driver
+        :return:driver
+        """
         capabilities = {
             "platformName": "Android",
             "deviceName": self.device,
