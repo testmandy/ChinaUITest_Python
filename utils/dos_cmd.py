@@ -6,6 +6,7 @@ class DosCmd:
     def excute_cmd_result(self, command):
         """
         执行cmd命令，并返回result
+        :param command:需要执行的命令语句
         :return:result_list
         """
         result_list = []
@@ -19,6 +20,8 @@ class DosCmd:
     def excute_cmd(self, command):
         """
         执行cmd命令，无返回值
+        :param command:需要执行的命令语句
+        :param command:需要执行的命令语句
         """
         os.system(command)
 

@@ -21,6 +21,7 @@ class BaseDriver:
     def __init__(self, i):
         """
         appium 命令生成设备信息后，从userconfig.ini文件中读取device、port
+        :param i:生成的ini文件中，第i个设备信息
         """
         write_file = WriteUserConfig()
         self.device = write_file.get_value('device' + str(i), 'deviceName')
@@ -28,7 +29,7 @@ class BaseDriver:
 
     def android_driver(self):
         """
-        Android driver
+        Android driver配置信息
         :return:driver
         """
         capabilities = {

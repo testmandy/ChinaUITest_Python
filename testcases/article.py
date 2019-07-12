@@ -89,7 +89,7 @@ class Article(unittest.TestCase):
                         text[7].click()
                         # 点击确认删除按钮
                         operation.waiting_click(2, "confirm", "Common")
-                        time.sleep(10)
+                        time.sleep(15)
                         # 获取截屏
                         operation.capture("read_" + str(i))
                         # 点击返回按钮
@@ -113,7 +113,7 @@ class Article(unittest.TestCase):
         videos[4].click()
         # 点击第一个【新闻联播】
         videos[9].click()
-        time.sleep(1000)
+        time.sleep(10)
         # 点击返回按钮
         operation.tap_test("back_button")
 

@@ -9,6 +9,9 @@ class GetByLocal:
     def get_element(self, driver, key, section):
         """
         查找页面元素
+        :param driver: 设备驱动
+        :param key: ini文件中的key
+        :param section: ini文件中的section
         :return:查找结果element
         """
         read_ini = self.readIni

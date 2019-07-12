@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 import threading
 import time
 import logging
@@ -19,6 +20,7 @@ class Server:
         self.device_list = self.get_devices()
         device1 = self.device_list[0]
         self.write_file = WriteUserConfig()
+        self.log_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "\\log"
 
     def get_devices(self):
         """
@@ -75,7 +77,7 @@ class Server:
         :return:
         """
         port_list = []
-        if device_list != None:
+        if device_list is not None:
             while len(port_list) != len(device_list):
                 if self.port_is_used(start_port) != True:
                     port_list.append(start_port)
@@ -88,6 +90,7 @@ class Server:
     def create_appium_command(self, i):
         """
         appium -p 4723 -bp 4701 -U 159beaa8
+        :param i: 第i个设备
         :return:command_list
         os.system会阻塞进程，为避免不影响执行下一步，在命令前面一定要加start
         改为用os.system("start appium -a 127.0.0.1 -p %s -U %s")
@@ -97,8 +100,8 @@ class Server:
         print(self.device_list)
         appium_port_list = self.create_port_list(4700, self.device_list)
         bootstrap_port_list = self.create_port_list(4900, self.device_list)
-        command = "start appium -p " + str((appium_port_list)[i]) + " -bp " + str((bootstrap_port_list)[i]) + " -U " + \
-                  self.device_list[i] + " --no-reset --session-override"
+        command = "start /b appium -p " + str((appium_port_list)[i]) + " -bp " + str((bootstrap_port_list)[i]) + " -U " + \
+                  self.device_list[i] + " --no-reset --session-override --log " + self.log_path
         command_list.append(command)
         self.write_file.write_data(i, self.device_list[i], str((bootstrap_port_list)[i]), str((appium_port_list)[i]))
         return command_list
@@ -106,6 +109,7 @@ class Server:
     def start_server(self, i):
         """
         定义方法：启动appium server
+        :param i: 第i个设备
         """
         print("Starting server NOW")
         self.start_appium_list = self.create_appium_command(i)

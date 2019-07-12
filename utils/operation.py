@@ -17,6 +17,7 @@ class Operation:
     def capture(self, name):
         """
         定义截图方法
+        :param name: 图片命名
         """
         time.sleep(2)
         img_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + '//screenshots//'
@@ -27,6 +28,8 @@ class Operation:
     def get_element(self, key, section):
         """
         获取页面元素
+        :param key: ini文件中的key
+        :param section: ini文件中的section
         :return:element
         """
         return self.starter.get_element(self.driver, key, section)
@@ -34,6 +37,9 @@ class Operation:
     def get_son_element(self, father_element, key, section):
         """
         获取父元素下的子元素
+        :param father_element: 父元素
+        :param key: ini文件中的key
+        :param section: ini文件中的section
         :return:element
         """
         return self.starter.get_element(father_element, key, section)
@@ -41,9 +47,13 @@ class Operation:
     def waiting_click(self, timeout, key, section, i=None):
         """
         封装方法，等待几秒后再点击操作
+        :param timeout: 等待时间
+        :param key: ini文件中的key
+        :param section: ini文件中的section
+        :param i:第i个元素
         """
         time.sleep(timeout)
-        if None == i:
+        if i is None:
             self.starter.get_element(self.driver, key, section).click()
         else:
             self.starter.get_element(self.driver, key, section)[i].click()
@@ -51,9 +61,14 @@ class Operation:
     def waiting_send_keys(self, timeout, key, section, message, i=None):
         """
         封装方法，等待几秒后再输入字符串
+        :param timeout: 等待时间
+        :param key: ini文件中的key
+        :param section: ini文件中的section
+        :param message: 需要输入的字符串
+        :param i:第i个元素
         """
         time.sleep(timeout)
-        if None == i:
+        if i is None:
             self.starter.get_element(self.driver, key, section).send_keys(message)
         else:
             self.starter.get_element(self.driver, key, section)[i].send_keys(message)
@@ -61,6 +76,8 @@ class Operation:
     def find_element(self, key, section):
         """
         查看（判断）页面是否有某元素
+        :param key: ini文件中的key
+        :param section: ini文件中的section
         :return:True or False
         """
         time.sleep(1)
@@ -126,6 +143,7 @@ class Operation:
     def swipe_on(self, direction):
         """
         传入方向值，实现一个方法在不同方向滑动
+        :param direction: 方向值
         """
         time.sleep(1)
         if direction == "left":
@@ -140,6 +158,8 @@ class Operation:
     def tap_test(self, key, waiting_time=2):
         """
         根据屏幕定位点击元素
+        :param key: ini文件中的key
+        :param waiting_time: 等待时间
         """
         time.sleep(waiting_time)
         # 设定系数，控件在当前手机的坐标位置除以当前手机的最大坐标就是相对的系数了
@@ -152,4 +172,3 @@ class Operation:
         y0 = self.driver.get_window_size()['height']
         # 屏幕坐标乘以系数即为用户要点击位置的具体坐标
         self.driver.tap([(a1 * x0, b1 * y0)])
-

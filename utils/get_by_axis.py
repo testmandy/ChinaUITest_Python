@@ -14,6 +14,7 @@ class GetByAxis:
     def get_axis(self, key):
         """
         获取坐标轴数据，并返回value
+        :param key: ini文件中的key
         :return:x, y轴的值
         """
         readIni = ReadIni(self.file_path)
