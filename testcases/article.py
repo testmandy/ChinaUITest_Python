@@ -122,7 +122,7 @@ class TestArticle(object):
         # 点击返回按钮
         operation.tap_test("back_button")
         # 轮询点击【tab】
-        for j in range(2, 9):
+        for j in range(2, 5):
             try:
                 videos[j].click()
                 # # 向上滑动
