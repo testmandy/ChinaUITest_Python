@@ -1,10 +1,25 @@
 # coding=utf-8
+import conftest
 from utils.read_ini import ReadIni
 
 
-class GetByLocal:
-    def __init__(self):
-        self.readIni = ReadIni()
+class GetElement:
+
+    def get_axis(self, key):
+        """
+        获取坐标轴数据，并返回value
+        :param key: ini文件中的key
+        :return:x, y轴的值
+        """
+        file_path = conftest.android_axis_dir
+        read_ini = ReadIni(file_path)
+        axis = read_ini.get_value(key)
+        if axis is not None:
+            x = axis.split(",")[0]
+            y = axis.split(",")[1]
+            return x, y
+        else:
+            return None
 
     def get_element(self, driver, key, section):
         """
@@ -14,7 +29,7 @@ class GetByLocal:
         :param section: ini文件中的section
         :return:查找结果element
         """
-        read_ini = self.readIni
+        read_ini = ReadIni()
         local = read_ini.get_value(key, section)
         if local is not None:
             by = local.split(">")[0]
@@ -52,4 +67,3 @@ class GetByLocal:
                     print(u"查找元素异常%s" % msg)
         else:
             return None
-

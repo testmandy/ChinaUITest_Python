@@ -57,7 +57,7 @@ class BaseDriver:
 
     def iOS_driver(self):
         # 配置信息
-        print("iOS driver已连接的第一个设备：" + self.device)
+        print("[MyLog]--------iOS driver已连接的第一个设备：" + self.device)
         capabilities = {
             "platformName": "iOS",
             "deviceName": "iPhone 6s",

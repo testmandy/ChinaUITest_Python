@@ -2,23 +2,20 @@
 import os
 import threading
 import time
-import logging
+
 
 from utils.dos_cmd import DosCmd
 from utils.write_userconfig import WriteUserConfig
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 
 class Server:
     def __init__(self):
         self.dos = DosCmd()
-        global bp, port, device1
+        global bp, port
         bp = 4700
         port = 4723
         self.device_list = self.get_devices()
-        device1 = self.device_list[0]
         self.write_file = WriteUserConfig()
         self.log_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "\\log"
 
@@ -34,8 +31,8 @@ class Server:
         except Exception as msg:
             print(u"启动adb异常%s" % msg)
         time.sleep(2)
-        print("----------------执行adb devices的结果长度为：" + str(len(result_list)) + "----------------")
-        print("执行adb devices的结果为：" + str(result_list))
+        print("[MyLog]--------the length of results is: --------" + str(len(result_list)) )
+        print("[MyLog]--------the result of [adb devices] is: " + str(result_list))
         if len(result_list) >= 2:
             for i in result_list:
                 if 'List' in i:
@@ -46,12 +43,12 @@ class Server:
                     if devices_info[-1] == 'device':
                         devices_list.append(devices_info[0])
                 except Exception as msg:
-                    print(u"获取device失败%s" % msg)
+                    print(u"Failed to get the devices %s" % msg)
                 else:
                     time.sleep(2)
             return devices_list
         else:
-            logger.info('没有连接的设备')
+            print(u'[MyLog]--------没有连接的设备，请检查……')
 
     def port_is_used(self, port_num):
         """
@@ -79,12 +76,12 @@ class Server:
         port_list = []
         if device_list is not None:
             while len(port_list) != len(device_list):
-                if self.port_is_used(start_port) != True:
+                if self.port_is_used(start_port) is not True:
                     port_list.append(start_port)
                 start_port = start_port + 1
             return port_list
         else:
-            print(u"生成可用端口失败")
+            print(u"[MyLog]--------Failed to creat port list")
             return None
 
     def create_appium_command(self, i):
@@ -111,7 +108,7 @@ class Server:
         定义方法：启动appium server
         :param i: 第i个设备
         """
-        print("Starting server NOW")
+        print("[MyLog]--------Starting server NOW")
         self.start_appium_list = self.create_appium_command(i)
         print(self.start_appium_list)
         self.dos.excute_cmd(self.start_appium_list[0])
@@ -134,10 +131,14 @@ class Server:
         thread_list = []
         self.kill_server()
         self.write_file.clear_data()
-        print("start write data to file: userconfig.yaml")
-        for i in range(len(self.device_list)):
-            appium_start = threading.Thread(target=self.start_server, args=(i,))
-            thread_list.append(appium_start)
-        for j in thread_list:
-            j.start()
-        time.sleep(25)
+        try:
+            len(self.device_list)
+        except Exception as msg:
+            print(u"[MyLog]--------设备读取异常%s" % msg)
+        else:
+            for i in range(len(self.device_list)):
+                appium_start = threading.Thread(target=self.start_server, args=(i,))
+                thread_list.append(appium_start)
+            for j in thread_list:
+                j.start()
+            time.sleep(25)

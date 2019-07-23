@@ -2,17 +2,18 @@
 import os
 import time
 
-from utils.get_by_axis import GetByAxis
-from utils.get_by_local import GetByLocal
+from utils.get_element import GetElement
 
 
 class Operation:
     def __init__(self, driver):
         self.driver = driver
-        print("开始运行APP")
-        # 实例化GetByLocal
-        self.starter = GetByLocal()
-        self.getByAxis = GetByAxis()
+        print("[MyLog]--------Start to run testcase")
+        # 获取当前手机屏幕大小X,Y
+        self.width = self.get_size()[0]
+        self.height = self.get_size()[1]
+        # 实例化GetElement
+        self.starter = GetElement()
 
     def capture(self, name):
         """
@@ -105,9 +106,9 @@ class Operation:
         设想size的返回类型为[100,200]
         """
         # 设想size的返回类型为[100,200]
-        x1 = self.get_size()[0] / 10 * 9
-        y1 = self.get_size()[1] / 2
-        x = self.get_size()[0] / 10
+        x1 = self.width / 10 * 9
+        y1 = self.height / 2
+        x = self.width / 10
         self.driver.swipe(x1, y1, x, y1)
 
     def swipe_right(self):
@@ -115,9 +116,9 @@ class Operation:
         向右滑动
         设想size的返回类型为[100,200]
         """
-        x1 = self.get_size()[0] / 10
-        y1 = self.get_size()[1] / 2
-        x = self.get_size()[0] / 10 * 9
+        x1 = self.width / 10
+        y1 = self.height / 2
+        x = self.width / 10 * 9
         self.driver.swipe(x1, y1, x, y1)
 
     def swipe_up(self):
@@ -125,9 +126,9 @@ class Operation:
         向上滑动
         设想size的返回类型为[100,200]
         """
-        x1 = self.get_size()[0] / 2
-        y1 = self.get_size()[1] / 10 * 9
-        y = self.get_size()[1] / 10
+        x1 = self.width / 2
+        y1 = self.height / 10 * 9
+        y = self.height / 10
         self.driver.swipe(x1, y1, x1, y)
 
     def swipe_down(self):
@@ -135,9 +136,9 @@ class Operation:
         向下滑动
         设想size的返回类型为[100,200]
         """
-        x1 = self.get_size()[0] / 2
-        y1 = self.get_size()[1] / 10
-        y = self.get_size()[1] / 10 * 9
+        x1 = self.width / 2
+        y1 = self.height / 10
+        y = self.height / 10 * 9
         self.driver.swipe(x1, y1, x1, y)
 
     def swipe_on(self, direction):
@@ -155,20 +156,17 @@ class Operation:
         else:
             self.swipe_down()
 
-    def tap_test(self, key, waiting_time=2):
+    def tap_test(self, key):
         """
         根据屏幕定位点击元素
         :param key: ini文件中的key
         :param waiting_time: 等待时间
         """
-        time.sleep(waiting_time)
+        time.sleep(2)
         # 设定系数，控件在当前手机的坐标位置除以当前手机的最大坐标就是相对的系数了
-        x = int(self.getByAxis.get_axis(key)[0])
-        y = int(self.getByAxis.get_axis(key)[1])
-        a1 = x / 720
-        b1 = y / 1280
-        # 获取当前手机屏幕大小X,Y
-        x0 = self.driver.get_window_size()['width']
-        y0 = self.driver.get_window_size()['height']
+        x = int(self.starter.get_axis(key)[0])
+        y = int(self.starter.get_axis(key)[1])
+        x1 = x / 720
+        y1 = y / 1280
         # 屏幕坐标乘以系数即为用户要点击位置的具体坐标
-        self.driver.tap([(a1 * x0, b1 * y0)])
+        self.driver.tap([(x1 * self.width, y1 * self.height)])

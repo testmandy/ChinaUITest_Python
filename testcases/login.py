@@ -3,7 +3,7 @@ import os
 import time
 
 from common.base_driver import BaseDriver
-from utils.get_by_local import GetByLocal
+from utils.get_element import GetByLocal
 
 
 # 实例化driver

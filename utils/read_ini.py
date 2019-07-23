@@ -1,6 +1,6 @@
 # coding=utf-8
 import configparser
-import os
+import conftest
 
 
 class ReadIni:
@@ -11,8 +11,7 @@ class ReadIni:
         :param file_path: ini文件地址
         """
         if file_path is None:
-            self.file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + \
-                             "/config/android/elements.ini"
+            self.file_path = conftest.android_elements_dir
         else:
             self.file_path = file_path
         self.data = self.read_ini()
@@ -36,5 +35,4 @@ class ReadIni:
         else:
             section = section
         return self.data.get(section, key)
-
 

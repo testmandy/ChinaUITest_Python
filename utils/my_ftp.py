@@ -5,8 +5,7 @@ import ftplib
 import os
 import time
 import zipfile
-
-from common import mypaths
+import conftest
 
 ftp_host = '10.88.0.22'
 ftp_username = 'test'
@@ -18,7 +17,7 @@ class MyFtp:
     def __init__(self):
         self.ftp = ftplib.FTP(ftp_host)
         self.filename = 'SkyVPNDebugItunes.ipa'
-        self.local_screen_path = mypaths.screenshots_dir
+        self.local_screen_path = conftest.screenshots_dir
         self.remote_path = r'/Ad_Screenshot/'
         now_time = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
         # 压缩后文件夹的名字
@@ -43,9 +42,9 @@ class MyFtp:
             # 实现当前文件夹以及包含的所有文件的压缩
             fpath = fpath and fpath + os.sep or ''
             for filename in filenames:
-                print('compressing', filename)
+                print('[MyLog]--------compressing', filename)
                 z.write(os.path.join(dirpath, filename), fpath + filename)
-                print('compressing finished')
+                print('[MyLog]--------compressing finished')
         z.close()
 
     def zip_files(self, zip_file_dir):
@@ -61,9 +60,9 @@ class MyFtp:
             # 去掉目标跟路径，只对目标文件夹下边的文件及文件夹进行压缩
             fpath = path.replace(zip_file_dir, '')
             for filename in filenames:
-                print('Compressing', filename)
+                print('[MyLog]--------Compressing', filename)
                 zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
-        print('Compressing finished!')
+        print('[MyLog]--------Compressing finished!')
         zip.close()
 
     def download_file(self, local_file, remote_file):  
@@ -78,12 +77,12 @@ class MyFtp:
 
     def download_file_tree(self, local_dir, remote_dir):  
         # 下载整个目录下的文件
-        print("remote_dir:", remote_dir)
+        print("[MyLog]--------remote_dir:", remote_dir)
         if not os.path.exists(local_dir):
             os.makedirs(local_dir)
         self.ftp.cwd(remote_dir)
         remote_names = self.ftp.nlst()
-        print("remote_names", remote_names)
+        print("[MyLog]--------remote_names", remote_names)
         for file in remote_names:
             local = os.path.join(local_dir, file)
             print(self.ftp.nlst(file))
@@ -113,16 +112,16 @@ class MyFtp:
         file_handler = open(upload_file, 'rb')
         # 要上传的远程文件地址+文件名
         filename = remote_path + upload_file
-        print('Uploading', upload_file)
+        print('[MyLog]--------Uploading', upload_file)
         # 上传文件
         self.ftp.storbinary('STOR %s' % os.path.basename(filename), file_handler, buf_size)
         self.ftp.set_debuglevel(0)
-        print('Uploading finished! You can link the following address for details:')
+        print('[MyLog]--------Uploading finished! You can link the following address for details:')
         print('ftp://' + ftp_host + self.remote_path)
 
     def remove_zip(self, zipname):
         os.remove(zipname)
-        print('Remove zip success!')
+        print('[MyLog]--------Remove zip success!')
 
     # 递归删除目录及其子目录下的文件
     def remove_files(self, path):
@@ -132,7 +131,7 @@ class MyFtp:
                 os.remove(path_file)
             else:
                 self.remove_files(path_file)
-        print('Remove files success!')
+        print('[MyLog]--------Remove files success!')
 
 
     def make_dir(self):
@@ -147,7 +146,7 @@ class MyFtp:
         # 上传文件
         self.upload_files(self.remote_path)
         self.remove_zip(self.zip_name)
-        self.remove_files(mypaths.screenshots_list)
+        self.remove_files(conftest.screenshots_list)
         self.close()
 
 

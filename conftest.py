@@ -22,10 +22,12 @@ screenshots_list = os.path.join(project_dir, 'screenshots')
 
 config_dir = os.path.join(project_dir, 'config')
 
-userconfig_dir = os.path.join(config_dir, 'userconfig.yaml')
+userconfig_dir = os.path.join(config_dir, 'userconfig.yaml')\
 
+case_dir = os.path.join(project_dir, 'testcases\\article.py')
 
 def get_logger():
     CONF_LOG = "../config/logging.ini"
     logging.config.fileConfig(CONF_LOG)
     logger = logging.getLogger()
+
