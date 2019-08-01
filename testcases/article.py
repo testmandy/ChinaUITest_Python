@@ -46,7 +46,7 @@ class TestArticle(object):
         page = operation.get_element("page", "Study")
         tabs = operation.get_son_element(page, "articles", "Study")
         # 轮询点击【tab】
-        for j in range(2, 8):
+        for j in range(2, 15):
             try:
                 print(u"[MyLog]--------点击第" + str(j) + "个tab")
                 tabs[j].click()
@@ -56,7 +56,7 @@ class TestArticle(object):
                 # 轮询点击每一篇文章
                 print(u"[MyLog]--------获取文章列表")
                 articles = operation.get_element("articles", "Study")
-                for i in range(0, 3):
+                for i in range(0, 1):
                     try:
                         print(u"[MyLog]--------点击第" + str(i) + "篇文章")
                         articles[i].click()

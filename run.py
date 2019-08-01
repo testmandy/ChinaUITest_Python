@@ -7,3 +7,4 @@ import conftest
 
 if __name__ == '__main__':
     os.system("pytest -v " + conftest.case_dir)
+
