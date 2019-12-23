@@ -37,6 +37,9 @@ class BaseDriver:
             "deviceName": self.device,
             # 可以通过newcommandtimeout将超时时间改长，超时时间可按照实际情况自定义
             "newCommandTimeout": "2000",
+            # "uiautomator2ServerInstallTimeout": 20000,
+            # "androidInstallTimeout": 90000,
+            # "uiautomator2ServerLaunchTimeout": 90000,
             "app": "E:\\360Downloads\\cn.xuexi.android_508.apk",
             "appWaitActivity": "com.alibaba.android.rimet.biz.SplashActivity",
             "appPackage": "cn.xuexi.android",

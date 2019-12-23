@@ -46,7 +46,7 @@ class TestArticle(object):
         测试用例：阅读文章
         """
         print('[MyLog]--------Begin running [test_read]')
-        time.sleep(5)
+        time.sleep(15)
         page = operation.get_element("page", "Study")
         tabs = operation.get_son_element(page, "articles", "Study")
         # 轮询点击【tab】
